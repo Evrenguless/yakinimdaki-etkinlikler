@@ -3,7 +3,7 @@ import openai
 from pathlib import Path
 
 # OpenAI API key: GitHub Secrets -> OPENAI_API_KEY
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("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)
 
 # Örnek prompt: backend için route oluştur
 prompt = """
