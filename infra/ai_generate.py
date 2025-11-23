@@ -1,35 +1,25 @@
 import os
 import openai
-from pathlib import Path
 
-# OpenAI API key: GitHub Secrets -> OPENAI_API_KEY
-# Doğru
+# GitHub Secrets'tan API key al
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Örnek prompt: backend için route oluştur
-prompt = """
-Implement an Express route GET /api/events/nearby?lat=&lng=&radius= 
-that queries Postgres (table events with lat,lng cols) using ST_DWithin if PostGIS exists, 
-otherwise use Haversine. Return JSON { events: [...] } limited to 50.
-Provide full JS file content.
-"""
-
+# AI prompt ve kod üretme
 response = openai.ChatCompletion.create(
-    model="gpt-4",
+    model="gpt-3.5-turbo",  # GPT-4 yerine GPT-3.5 kullanıyoruz
     messages=[
         {"role": "system", "content": "You are a senior Node.js developer."},
-        {"role": "user", "content": prompt}
+        {"role": "user", "content": "Implement a backend route for 'events' that fetches events data."}
     ],
     temperature=0.3
 )
 
-# AI çıktısını dosyaya yaz
-output_dir = Path("../backend/src/routes")
-output_dir.mkdir(parents=True, exist_ok=True)
-file_path = output_dir / "events.js"
+# AI'dan gelen kodu al
+code = response.choices[0].message.content
 
-code = response['choices'][0]['message']['content']
-with open(file_path, "w", encoding="utf-8") as f:
+# Dosyaya yaz
+output_file = "backend/src/routes/events.js"
+with open(output_file, "w") as f:
     f.write(code)
 
-print(f"AI code generated at {file_path}")
+print(f"AI code generated at {output_file}")
