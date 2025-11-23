@@ -1,0 +1,27 @@
+name: AI Code Generator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+          cd ../frontend
+          npm install
+
+      - name: Call AI for code generation
+        run: |
+          python3 infra/ai_generate.py
