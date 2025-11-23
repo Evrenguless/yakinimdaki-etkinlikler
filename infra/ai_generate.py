@@ -3,6 +3,9 @@ import os
 # Dosya yolu
 output_file = "backend/src/routes/events.js"
 
+# Klasörleri oluştur (varsa atla)
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
 # Mock Node.js kodu (API çağrısı yapmadan workflow testi için)
 code = """
 // Mock Node.js route for nearby events
