@@ -27,9 +27,11 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-         python3 -m pip install --upgrade pip
-         pip install openai==0.28
-    
+          python3 -m pip install --upgrade pip
+          pip install openai==0.28
+
       - name: Call AI for code generation
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python3 infra/ai_generate.py
