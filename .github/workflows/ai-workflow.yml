@@ -32,6 +32,6 @@ jobs:
 
       - name: Call AI for code generation
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+         OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python3 infra/ai_generate.py
+         python3 infra/ai_generate.py
