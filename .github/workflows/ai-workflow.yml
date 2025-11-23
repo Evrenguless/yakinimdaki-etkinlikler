@@ -15,12 +15,20 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: |
           cd backend
           npm install
-          cd ../frontend
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
           npm install
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install openai
 
       - name: Call AI for code generation
         run: |
