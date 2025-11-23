@@ -1,37 +1,29 @@
 import os
-import requests
-import json
 
-# GitHub Secrets'tan API key al
-API_KEY = os.getenv("OPENROUTER_API_KEY")
-API_URL = "https://api.openrouter.ai/v1/chat/completions"
+# Dosya yolu
+output_file = "backend/src/routes/events.js"
 
-if not API_KEY:
-    raise ValueError("OpenRouter API key is missing. Add it as a secret named OPENROUTER_API_KEY.")
+# Mock Node.js kodu (API çağrısı yapmadan workflow testi için)
+code = """
+// Mock Node.js route for nearby events
+const express = require('express');
+const router = express.Router();
 
-# Mesajları oluştur
-messages = [
-    {"role": "system", "content": "You are a senior Node.js developer."},
-    {"role": "user", "content": "Implement a backend route for 'events' that fetches nearby events and returns JSON data."}
-]
+router.get('/events', (req, res) => {
+    res.json({
+        message: 'This is a mock response for testing workflow.',
+        events: [
+            {id: 1, name: 'Concert in Park', date: '2025-11-25'},
+            {id: 2, name: 'Art Exhibition', date: '2025-11-27'}
+        ]
+    });
+});
 
-# API çağrısı
-headers = {"Authorization": f"Bearer {API_KEY}"}
-data = {
-    "model": "llama-2-7b-chat",
-    "messages": messages,
-    "temperature": 0.3
-}
-
-response = requests.post(API_URL, headers=headers, json=data)
-result = response.json()
-
-# AI'dan gelen kodu al
-code = result["choices"][0]["message"]["content"]
+module.exports = router;
+"""
 
 # Dosyaya yaz
-output_file = "backend/src/routes/events.js"
 with open(output_file, "w") as f:
     f.write(code)
 
-print(f"AI code generated at {output_file}")
+print(f"Mock code generated at {output_file}")
