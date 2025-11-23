@@ -1,21 +1,33 @@
 import os
-import openai
+import requests
+import json
 
 # GitHub Secrets'tan API key al
-openai.api_key = os.getenv("OPENAI_API_KEY")
+API_KEY = os.getenv("OPENROUTER_API_KEY")
+API_URL = "https://api.openrouter.ai/v1/chat/completions"
 
-# AI prompt ve kod üretme
-response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",  # GPT-4 yerine GPT-3.5 kullanıyoruz
-    messages=[
-        {"role": "system", "content": "You are a senior Node.js developer."},
-        {"role": "user", "content": "Implement a backend route for 'events' that fetches events data."}
-    ],
-    temperature=0.3
-)
+if not API_KEY:
+    raise ValueError("OpenRouter API key is missing. Add it as a secret named OPENROUTER_API_KEY.")
+
+# Mesajları oluştur
+messages = [
+    {"role": "system", "content": "You are a senior Node.js developer."},
+    {"role": "user", "content": "Implement a backend route for 'events' that fetches nearby events and returns JSON data."}
+]
+
+# API çağrısı
+headers = {"Authorization": f"Bearer {API_KEY}"}
+data = {
+    "model": "llama-2-7b-chat",
+    "messages": messages,
+    "temperature": 0.3
+}
+
+response = requests.post(API_URL, headers=headers, json=data)
+result = response.json()
 
 # AI'dan gelen kodu al
-code = response.choices[0].message.content
+code = result["choices"][0]["message"]["content"]
 
 # Dosyaya yaz
 output_file = "backend/src/routes/events.js"
