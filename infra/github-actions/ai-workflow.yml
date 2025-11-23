@@ -1,0 +1,30 @@
+name: AI Code Generator
+
+on:
+  workflow_dispatch:  # manuel tetikleme
+  schedule:
+    - cron: '0 0 * * *' # her gün 00:00'da çalışır (opsiyonel)
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+          cd ../frontend
+          npm install
+
+      - name: Call AI for code generation
+        run: |
+          echo "Buraya AI promptlarını gönderip kod üretecek script gelecek"
+          # Örnek: python scripts/ai_generate.py --task "backend route"
